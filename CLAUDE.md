@@ -31,3 +31,4 @@ Suggested note format:
 ### 2026-05-25
 - [Claude] Initialized CLAUDE.md with project description and Agent Memory Protocol. No code changes; bootstrap only so future Claude/Codex sessions share context.
 - [Codex] Added public-facing project materials: README, GitHub Pages front page in docs/index.html, and .gitignore for Android/Gradle output. Preparing repository for public GitHub publishing.
+- [Codex] User preference clarified: avoid unnecessary permission prompts. Proceed automatically for routine reads, edits, builds, tests, Git operations, metadata checks, and verification when tools allow it. Ask only when the environment blocks the action or when the operation is genuinely risky, such as destructive filesystem changes, credential/auth changes, installs/downloads, remote deletion/publishing changes, or actions likely to harm files, accounts, repos, or system state.
