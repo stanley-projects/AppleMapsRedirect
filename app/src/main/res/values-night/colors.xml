@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Bridge palette (dark) — same hue family, inverted lightness.
+         Accent inverts so the primary button stays high-contrast on dark surface. -->
+    <color name="bridge_background">#14161B</color>
+    <color name="bridge_surface">#1E2128</color>
+    <color name="bridge_ink">#EEF0F4</color>
+    <color name="bridge_ink_muted">#8C9099</color>
+    <color name="bridge_ink_subtle">#5A5E66</color>
+    <color name="bridge_divider">#2D3038</color>
+    <color name="bridge_on_ink">#14161B</color>
+    <color name="bridge_error">#D67865</color>
+</resources>

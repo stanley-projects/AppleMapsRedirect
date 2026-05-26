@@ -1,22 +1,46 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
 
+val keystorePropertiesFile = rootProject.file("local.properties")
+val keystoreProperties = Properties().apply {
+    if (keystorePropertiesFile.exists()) load(keystorePropertiesFile.inputStream())
+}
+val hasReleaseSigning = keystoreProperties.containsKey("RELEASE_STORE_FILE") &&
+    keystoreProperties.containsKey("RELEASE_STORE_PASSWORD") &&
+    keystoreProperties.containsKey("RELEASE_KEY_PASSWORD")
+
 android {
-    namespace = "com.applemapsredirect"
+    namespace = "com.stanley.bridge"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.applemapsredirect"
+        applicationId = "com.stanley.bridge"
         minSdk = 21
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
     }
 
+    if (hasReleaseSigning) {
+        signingConfigs {
+            create("release") {
+                storeFile = file(keystoreProperties["RELEASE_STORE_FILE"] as String)
+                storePassword = keystoreProperties["RELEASE_STORE_PASSWORD"] as String
+                keyAlias = "bridge-key"
+                keyPassword = keystoreProperties["RELEASE_KEY_PASSWORD"] as String
+            }
+        }
+    }
+
     buildTypes {
         release {
+            if (hasReleaseSigning) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

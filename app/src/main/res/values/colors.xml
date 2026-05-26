@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="accent_green">#34A853</color>
-    <color name="accent_green_dark">#2D9249</color>
-    <color name="background">#FAFAFA</color>
-    <color name="card_background">#FFFFFF</color>
-    <color name="card_stroke">#E0E0E0</color>
-    <color name="error_red">#D32F2F</color>
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
-    <color name="white">#FFFFFF</color>
+    <!-- Bridge palette (light) — Restrained, tinted neutrals + one deep-ink accent.
+         Derived from OKLCH with hue 250 (cool ink) and very low chroma. -->
+    <color name="bridge_background">#FAFBFC</color>
+    <color name="bridge_surface">#F4F5F7</color>
+    <color name="bridge_ink">#1B1F28</color>
+    <color name="bridge_ink_muted">#6D7280</color>
+    <color name="bridge_ink_subtle">#9CA0A8</color>
+    <color name="bridge_divider">#E4E6EB</color>
+    <color name="bridge_on_ink">#FAFBFC</color>
+    <color name="bridge_error">#B0412B</color>
 </resources>

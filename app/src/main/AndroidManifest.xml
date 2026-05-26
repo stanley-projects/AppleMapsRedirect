@@ -5,10 +5,11 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppleMapsRedirect">
+        android:theme="@style/Theme.Bridge">
 
         <activity
             android:name=".MainActivity"
@@ -21,11 +22,16 @@
         </activity>
 
         <activity
+            android:name=".OnboardingActivity"
+            android:exported="false"
+            android:label="@string/app_name" />
+
+        <activity
             android:name=".RedirectActivity"
             android:exported="true"
             android:noHistory="true"
             android:excludeFromRecents="true"
-            android:theme="@style/Theme.AppleMapsRedirect.Transparent">
+            android:theme="@style/Theme.Bridge.Transparent">
 
             <intent-filter android:autoVerify="false">
                 <action android:name="android.intent.action.VIEW" />

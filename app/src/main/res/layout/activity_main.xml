@@ -3,39 +3,89 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:fillViewport="true">
+    android:background="@color/bridge_background"
+    android:fillViewport="true"
+    android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:paddingHorizontal="24dp"
+        android:paddingTop="72dp"
+        android:paddingBottom="32dp">
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/text_primary"
+            android:textSize="32sp"
+            android:textColor="@color/bridge_ink"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="-0.01"
             android:layout_marginBottom="4dp" />
 
         <TextView
+            android:id="@+id/subhead"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Convert Apple Maps links to Google Maps"
-            android:textSize="14sp"
-            android:textColor="@color/text_secondary"
+            android:text="@string/subhead"
+            android:textSize="15sp"
+            android:textColor="@color/bridge_ink_muted"
             android:layout_marginBottom="32dp" />
 
-        <com.google.android.material.textfield.TextInputLayout
+        <!-- Status chip (icon + text + chevron). Hidden when auto-bridging is on. -->
+        <LinearLayout
+            android:id="@+id/status_chip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Paste Apple Maps link"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:paddingVertical="10dp"
+            android:visibility="gone"
+            android:layout_marginBottom="20dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_status_settings"
+                android:contentDescription="@null"
+                android:layout_marginEnd="14dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/status_off"
+                android:textSize="14sp"
+                android:textColor="@color/bridge_ink"
+                android:fontFamily="sans-serif-medium" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_chevron_right"
+                android:contentDescription="@null"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/field_hint"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/accent_green"
-            app:hintTextColor="@color/accent_green"
+            app:boxStrokeColor="@color/bridge_ink"
+            app:boxStrokeWidth="1dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:hintTextColor="@color/bridge_ink_muted"
+            android:textColorHint="@color/bridge_ink_subtle"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
             android:layout_marginBottom="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -43,9 +93,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textUri|textMultiLine"
-                android:minLines="2"
-                android:maxLines="4"
-                android:textSize="14sp" />
+                android:minLines="3"
+                android:maxLines="6"
+                android:textSize="15sp"
+                android:textColor="@color/bridge_ink"
+                android:lineSpacingMultiplier="1.3"
+                android:gravity="top|start" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -53,77 +106,122 @@
             android:id="@+id/btn_convert"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Convert"
-            android:textSize="16sp"
-            app:backgroundTint="@color/accent_green"
-            android:layout_marginBottom="24dp" />
+            android:minHeight="52dp"
+            android:text="@string/btn_convert"
+            android:textSize="15sp"
+            android:textColor="@color/bridge_on_ink"
+            android:letterSpacing="0"
+            android:textAllCaps="false"
+            android:fontFamily="sans-serif-medium"
+            app:backgroundTint="@color/bridge_ink"
+            app:cornerRadius="12dp"
+            app:rippleColor="@color/bridge_on_ink"
+            android:stateListAnimator="@null"
+            android:enabled="false" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/result_card"
+        <!-- Result region. Shown after a successful convert OR an error. -->
+        <LinearLayout
+            android:id="@+id/result_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:cardElevation="1dp"
-            app:cardCornerRadius="12dp"
-            app:strokeColor="@color/card_stroke"
-            app:strokeWidth="1dp"
-            app:cardBackgroundColor="@color/card_background">
+            android:orientation="vertical"
+            android:visibility="gone">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/bridge_divider"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Icon + status word (e.g. ✓ Converted  or  ⚠ Couldn't read this link) -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="14dp">
+
+                <ImageView
+                    android:id="@+id/result_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_status_check"
+                    android:contentDescription="@null"
+                    android:layout_marginEnd="10dp" />
 
                 <TextView
+                    android:id="@+id/result_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Google Maps Link"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="8dp" />
-
-                <TextView
-                    android:id="@+id/result_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:text="@string/result_label"
                     android:textSize="14sp"
-                    android:textColor="@color/text_primary"
-                    android:textIsSelectable="true"
-                    android:layout_marginBottom="16dp" />
+                    android:textColor="@color/bridge_ink"
+                    android:fontFamily="sans-serif-medium" />
+            </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+            <TextView
+                android:id="@+id/result_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/bridge_ink_muted"
+                android:textIsSelectable="true"
+                android:lineSpacingMultiplier="1.4" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_copy"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Copy to Clipboard"
-                        android:textSize="12sp"
-                        app:strokeColor="@color/accent_green"
-                        android:textColor="@color/accent_green"
-                        android:layout_marginEnd="8dp" />
+            <LinearLayout
+                android:id="@+id/result_actions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="20dp">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_open"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Open in Maps"
-                        android:textSize="12sp"
-                        app:backgroundTint="@color/accent_green" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_copy"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:minWidth="0dp"
+                    android:paddingHorizontal="16dp"
+                    android:text="@string/btn_copy"
+                    android:textSize="14sp"
+                    android:textAllCaps="false"
+                    android:textColor="@color/bridge_ink"
+                    android:fontFamily="sans-serif-medium"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:rippleColor="@color/bridge_divider" />
 
-                </LinearLayout>
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_open"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:minWidth="0dp"
+                    android:paddingHorizontal="16dp"
+                    android:text="@string/btn_open"
+                    android:textSize="14sp"
+                    android:textAllCaps="false"
+                    android:textColor="@color/bridge_ink"
+                    android:fontFamily="sans-serif-medium"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:icon="@drawable/ic_action_external"
+                    app:iconGravity="textEnd"
+                    app:iconSize="16dp"
+                    app:iconTint="@color/bridge_ink"
+                    app:iconPadding="8dp"
+                    app:rippleColor="@color/bridge_divider" />
 
             </LinearLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
 
     </LinearLayout>
 

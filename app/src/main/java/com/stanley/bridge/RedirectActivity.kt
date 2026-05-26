@@ -1,4 +1,4 @@
-package com.applemapsredirect
+package com.stanley.bridge
 
 import android.content.Intent
 import android.net.Uri
@@ -26,7 +26,7 @@ class RedirectActivity : AppCompatActivity() {
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
                 // Use chooser so user picks Google Maps, Waze, Uber, etc.
-                val chooser = Intent.createChooser(intent, "Open with")
+                val chooser = Intent.createChooser(intent, getString(R.string.chooser_open_with))
                 if (chooser.resolveActivity(packageManager) != null) {
                     startActivity(chooser)
                 } else {

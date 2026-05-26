@@ -1,4 +1,4 @@
-package com.applemapsredirect
+package com.stanley.bridge
 
 import android.net.Uri
 import kotlinx.coroutines.Dispatchers
@@ -10,14 +10,16 @@ data class ParsedLocation(
     val lat: Double? = null,
     val lng: Double? = null,
     val query: String? = null,
+    val label: String? = null,
     val isDirections: Boolean = false
 ) {
     fun toGoogleMapsUri(): String {
+        val labelPart = label?.takeIf { it.isNotBlank() }?.let { "(${Uri.encode(it)})" } ?: ""
         return when {
             isDirections && lat != null && lng != null ->
                 "google.navigation:q=$lat,$lng"
             lat != null && lng != null ->
-                "geo:$lat,$lng?q=$lat,$lng"
+                "geo:$lat,$lng?q=$lat,$lng$labelPart"
             !query.isNullOrBlank() ->
                 "geo:0,0?q=${Uri.encode(query)}"
             else -> throw IllegalStateException("No location data to convert")
@@ -47,43 +49,45 @@ object AppleMapsParser {
     private fun parseUrl(urlString: String): ParsedLocation {
         val uri = Uri.parse(urlString)
 
-        // 1. Check for ll= (lat,lng coordinates)
-        uri.getQueryParameter("ll")?.let { ll ->
-            val parts = ll.split(",")
+        // Modern Apple URLs pair coordinate=lat,lng with name=...
+        // When both exist, coordinate is the location and name becomes a display label.
+        val nameLabel = uri.getQueryParameter("name")?.takeIf { it.isNotBlank() }
+
+        // 1. coordinate (modern) or ll (legacy) — both carry lat,lng.
+        val coords = uri.getQueryParameter("coordinate") ?: uri.getQueryParameter("ll")
+        coords?.let {
+            val parts = it.split(",")
             if (parts.size == 2) {
                 val lat = parts[0].trim().toDoubleOrNull()
                 val lng = parts[1].trim().toDoubleOrNull()
                 if (lat != null && lng != null) {
-                    return ParsedLocation(lat = lat, lng = lng)
+                    return ParsedLocation(lat = lat, lng = lng, label = nameLabel)
                 }
             }
         }
 
-        // 2. Check for daddr= (directions destination)
+        // 2. daddr= (directions destination).
         uri.getQueryParameter("daddr")?.let { daddr ->
             val parts = daddr.split(",")
             if (parts.size == 2) {
                 val lat = parts[0].trim().toDoubleOrNull()
                 val lng = parts[1].trim().toDoubleOrNull()
                 if (lat != null && lng != null) {
-                    return ParsedLocation(lat = lat, lng = lng, isDirections = true)
+                    return ParsedLocation(lat = lat, lng = lng, label = nameLabel, isDirections = true)
                 }
             }
-            // daddr might be an address string
             return ParsedLocation(query = daddr, isDirections = true)
         }
 
-        // 3. Check for address=
+        // 3. address=
         uri.getQueryParameter("address")?.let { address ->
-            if (address.isNotBlank()) {
-                return ParsedLocation(query = address)
-            }
+            if (address.isNotBlank()) return ParsedLocation(query = address)
         }
 
-        // 4. Check for q= (query/place name)
-        uri.getQueryParameter("q")?.let { q ->
+        // 4. q= (legacy) or name= alone (modern) — query / place name. May itself be lat,lng.
+        val placeQuery = uri.getQueryParameter("q") ?: nameLabel
+        placeQuery?.let { q ->
             if (q.isNotBlank()) {
-                // q might be coordinates
                 val parts = q.split(",")
                 if (parts.size == 2) {
                     val lat = parts[0].trim().toDoubleOrNull()
@@ -96,14 +100,12 @@ object AppleMapsParser {
             }
         }
 
-        // 5. Check for saddr= (source address, less common)
+        // 5. saddr= (source address, rare).
         uri.getQueryParameter("saddr")?.let { saddr ->
-            if (saddr.isNotBlank()) {
-                return ParsedLocation(query = saddr)
-            }
+            if (saddr.isNotBlank()) return ParsedLocation(query = saddr)
         }
 
-        // 6. Try to extract from path (e.g., /place/Eiffel+Tower)
+        // 6. Path-based: /place/Eiffel+Tower (legacy slug form).
         val path = uri.path
         if (!path.isNullOrBlank() && path != "/") {
             val placePath = path.removePrefix("/place/").removePrefix("/")
@@ -113,20 +115,21 @@ object AppleMapsParser {
         }
 
         throw IllegalArgumentException(
-            "Could not extract location from URL. Supported parameters: ll, q, address, daddr"
+            "Could not extract location from URL. Supported parameters: coordinate, ll, q, name, address, daddr."
         )
     }
 
     private suspend fun resolveRedirects(urlString: String): String {
-        // If it already has query params we can parse, skip network call
+        // If it already has query params we can parse, skip the network call.
         val uri = Uri.parse(urlString)
-        val hasParams = uri.getQueryParameter("ll") != null ||
+        val hasParams = uri.getQueryParameter("coordinate") != null ||
+                uri.getQueryParameter("ll") != null ||
                 uri.getQueryParameter("q") != null ||
+                uri.getQueryParameter("name") != null ||
                 uri.getQueryParameter("address") != null ||
                 uri.getQueryParameter("daddr") != null
         if (hasParams) return urlString
 
-        // Follow redirects to get the final URL
         return withContext(Dispatchers.IO) {
             try {
                 val url = URL(urlString)
@@ -141,7 +144,6 @@ object AppleMapsParser {
                     val location = conn.getHeaderField("Location")
                     conn.disconnect()
                     if (!location.isNullOrBlank()) {
-                        // Recursively resolve in case of multiple redirects
                         return@withContext resolveRedirects(location)
                     }
                 }

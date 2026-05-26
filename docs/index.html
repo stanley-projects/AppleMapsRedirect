@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Apple Maps Redirect opens Apple Maps links on Android in Google Maps, Waze, or any other maps app of your choosing.">
-  <title>Apple Maps Redirect</title>
+  <meta name="description" content="Bridge opens Apple Maps links on Android in Google Maps, Waze, or any other maps app of your choosing.">
+  <title>Bridge</title>
   <style>
     :root {
       --ink: #17211b;
@@ -94,7 +94,7 @@
       display: grid;
       align-items: center;
       padding: 60px 0 44px;
-      background: linear-gradient(110deg, rgba(251, 252, 251, 0.96), rgba(251, 252, 251, 0.82)), url("https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=2200&q=82") center / cover;
+      background: linear-gradient(135deg, #ffffff 0%, #f3f6f3 100%);
       border-bottom: 1px solid var(--line);
     }
 
@@ -394,7 +394,7 @@
     <nav class="wrap" aria-label="Primary navigation">
       <a class="brand" href="#">
         <span class="mark">A</span>
-        <span>Apple Maps Redirect</span>
+        <span>Bridge</span>
       </a>
       <div class="navlinks">
         <a href="#features">Features</a>
@@ -408,11 +408,11 @@
     <section class="hero">
       <div class="wrap hero-grid">
         <div>
-          <h1>Apple Maps Redirect</h1>
+          <h1>Bridge</h1>
           <p class="lead">A tiny Android utility that catches Apple Maps links and opens them in Google Maps, Waze, or any other maps app of your choosing.</p>
           <div class="actions">
-            <a class="button primary" href="https://github.com/stanley-projects/AppleMapsRedirect/releases/latest">Download APK</a>
-            <a class="button" href="https://github.com/stanley-projects/AppleMapsRedirect">View on GitHub</a>
+            <a class="button primary" href="https://github.com/stanley-projects/Bridge/releases/latest">Download APK</a>
+            <a class="button" href="https://github.com/stanley-projects/Bridge">View on GitHub</a>
           </div>
         </div>
 
@@ -420,7 +420,7 @@
           <div class="screen">
             <div class="status"></div>
             <div class="app">
-              <h2>Apple Maps Redirect</h2>
+              <h2>Bridge</h2>
               <p>Convert Apple Maps links to Google Maps</p>
               <div class="input">https://maps.apple.com/?ll=37.7749,-122.4194&amp;q=San%20Francisco</div>
               <div class="convert">Convert</div>
@@ -461,13 +461,13 @@
       <div class="wrap">
         <div class="section-head">
           <h2>How it works</h2>
-          <p>Apple Maps Redirect stays out of the way until a maps link needs help.</p>
+          <p>Bridge stays out of the way until a maps link needs help.</p>
         </div>
         <div class="steps">
           <div class="step"><strong>Install</strong><span>Download the APK from the latest GitHub release.</span></div>
-          <div class="step"><strong>Tap a link</strong><span>Open an Apple Maps link from any app on your phone.</span></div>
-          <div class="step"><strong>Choose redirect</strong><span>Select Apple Maps Redirect when Android asks how to open it.</span></div>
-          <div class="step"><strong>Open maps</strong><span>Pick Google Maps, Waze, or any other maps app of your choosing.</span></div>
+          <div class="step"><strong>Enable auto-bridging</strong><span>Open Bridge once and tap <em>Enable auto-bridging</em>. Android opens a settings page; switch on <code>maps.apple.com</code>.</span></div>
+          <div class="step"><strong>Tap any Apple Maps link</strong><span>From chat, email, files, or anywhere else on your phone.</span></div>
+          <div class="step"><strong>Done</strong><span>Bridge routes the link silently to Google Maps, Waze, or any other maps app of your choosing.</span></div>
         </div>
       </div>
     </section>
@@ -476,7 +476,8 @@
       <div class="wrap">
         <div class="section-head">
           <h2>Install on Android</h2>
-          <p>Grab the latest APK, allow your browser or file manager to install unknown apps if Android asks, then open an Apple Maps link and choose Apple Maps Redirect.</p>
+          <p>Grab the latest APK, allow your browser or file manager to install unknown apps if Android asks, then open Bridge once and tap <em>Enable auto-bridging</em>. That takes you to an Android settings page where you flip <code>maps.apple.com</code> on. From then on, every Apple Maps link routes silently through Bridge.</p>
+          <p>Why the manual step? Android requires users to opt in per domain for any app that handles links to a third-party site. Bridge doesn’t own <code>apple.com</code>, so it can’t auto-verify the domain. This is an Android security boundary, not a Bridge limitation — every link-handling app of this type works the same way.</p>
         </div>
         <div class="features">
           <div class="card">
@@ -502,15 +503,15 @@
           <p>Clone the repository and run <code>.\gradlew.bat assembleDebug</code>. The APK lands at <code>app/build/outputs/apk/debug/app-debug.apk</code>.</p>
         </div>
         <div class="actions">
-          <a class="button primary" href="https://github.com/stanley-projects/AppleMapsRedirect">Open repository</a>
-          <a class="button" href="https://github.com/stanley-projects/AppleMapsRedirect/issues">Report an issue</a>
+          <a class="button primary" href="https://github.com/stanley-projects/Bridge">Open repository</a>
+          <a class="button" href="https://github.com/stanley-projects/Bridge/issues">Report an issue</a>
         </div>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="wrap">Apple Maps Redirect is an independent Android utility and is not affiliated with Apple or Google.</div>
+    <div class="wrap">Bridge is an independent Android utility and is not affiliated with Apple or Google.</div>
   </footer>
 </body>
 </html>

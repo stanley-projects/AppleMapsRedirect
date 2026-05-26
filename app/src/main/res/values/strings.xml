@@ -1,4 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AppleMapsRedirect</string>
+    <string name="app_name">Bridge</string>
+    <string name="subhead">Open Apple Maps links here.</string>
+    <string name="field_hint">Paste a maps.apple.com link</string>
+    <string name="btn_convert">Convert</string>
+    <string name="btn_convert_loading">Converting…</string>
+    <string name="result_label">Converted</string>
+    <string name="error_label">Couldn’t read this link</string>
+    <string name="btn_copy">Copy</string>
+    <string name="btn_copy_done">Copied</string>
+    <string name="btn_open">Open in maps</string>
+    <string name="error_default">The URL doesn’t contain a location Bridge can extract.</string>
+    <string name="error_not_apple_maps">That doesn’t look like an Apple Maps link.</string>
+    <string name="error_empty">Paste a maps.apple.com link to convert.</string>
+    <string name="chooser_open_with">Open with</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_feature_link">Catches every Apple Maps link</string>
+    <string name="onboarding_feature_route">Routes it silently in the background</string>
+    <string name="onboarding_feature_open">Opens in your maps app of choice</string>
+    <string name="onboarding_btn_enable">Enable auto-bridging</string>
+    <string name="onboarding_btn_skip">Skip for now</string>
+
+    <!-- Status chip on the main screen -->
+    <string name="status_off">Auto-bridging is off — tap to set up</string>
+
+    <!-- Toast shown when launching the system settings deep link -->
+    <string name="settings_hint">Tap “Supported web addresses,” then switch on maps.apple.com</string>
 </resources>
