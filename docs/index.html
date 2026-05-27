@@ -9,7 +9,7 @@
 
   <!-- Primary SEO -->
   <title>Bridge — Open Apple Maps Links on Android in Google Maps, Waze, or Any Maps App</title>
-  <meta name="description" content="Bridge is a free, open-source Android app that opens maps.apple.com links in Google Maps, Waze, HERE WeGo, OsmAnd, or any other maps app of your choosing. No accounts, no tracking, under 5 MB.">
+  <meta name="description" content="Tap any maps.apple.com link on Android — Bridge silently opens it in Google Maps, Waze, HERE WeGo, OsmAnd, or any other maps app of your choosing. Free, open source, no accounts, no tracking, under 5 MB.">
   <meta name="keywords" content="open Apple Maps links on Android, Apple Maps to Google Maps, Apple Maps Android, maps.apple.com Android, Apple Maps redirect Android, convert Apple Maps to Google Maps, Apple Maps in Waze, geo URI handler Android, Apple Maps link opener, iPhone shared location Android, Android link handler, free Android maps utility, open source Android app, no tracking maps app">
   <meta name="author" content="Stanley Nwobosi">
   <meta name="theme-color" content="#17211b">
@@ -29,7 +29,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Bridge">
   <meta property="og:title" content="Bridge — Open Apple Maps Links on Android">
-  <meta property="og:description" content="Free open-source Android app that opens maps.apple.com links in Google Maps, Waze, or any other maps app of your choosing. No accounts, no tracking.">
+  <meta property="og:description" content="Tap any maps.apple.com link on Android — Bridge silently opens it in Google Maps, Waze, or any maps app of your choosing. Free. Open source. No tracking.">
   <meta property="og:url" content="https://stanley-projects.github.io/Bridge/">
   <meta property="og:image" content="https://stanley-projects.github.io/Bridge/og-image.svg">
   <meta property="og:image:type" content="image/svg+xml">
@@ -41,7 +41,7 @@
   <!-- Twitter / X card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Bridge — Open Apple Maps Links on Android">
-  <meta name="twitter:description" content="Free open-source Android app that opens maps.apple.com links in Google Maps, Waze, or any other maps app of your choosing.">
+  <meta name="twitter:description" content="Tap any maps.apple.com link on Android — Bridge silently opens it in Google Maps, Waze, or any maps app of your choosing. Free, open source, no tracking.">
   <meta name="twitter:image" content="https://stanley-projects.github.io/Bridge/og-image.svg">
   <meta name="twitter:image:alt" content="Bridge app icon: two anchor points connected by an arched span.">
 
@@ -385,6 +385,34 @@
       overflow-wrap: anywhere;
     }
 
+    .auto-status {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 22px 0 10px;
+      padding: 10px 12px;
+      background: var(--soft);
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green-dark);
+      letter-spacing: 0.02em;
+    }
+
+    .auto-status::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 3px rgba(47, 157, 80, 0.18);
+      flex-shrink: 0;
+    }
+
+    .auto-status + .input {
+      margin-top: 0;
+    }
+
     section {
       padding: 76px 0;
     }
@@ -622,19 +650,20 @@
       <div class="wrap hero-grid">
         <div>
           <h1>Open Apple Maps links on Android.</h1>
-          <p class="lead">Bridge is a free, open-source Android app that catches <code>maps.apple.com</code> links and opens them in Google Maps, Waze, or any other maps app of your choosing. No accounts. No tracking. Under 5 MB.</p>
+          <p class="lead">Tap any <code>maps.apple.com</code> link on Android — Bridge silently opens it in Google Maps, Waze, or any other maps app of your choosing. Manual paste-and-convert is built in for the rare case a link arrives as plain text. No accounts. No tracking. Under 5 MB.</p>
           <div class="actions">
             <a class="button primary" href="https://github.com/stanley-projects/Bridge/releases/latest" rel="noopener">Download APK</a>
             <a class="button" href="https://github.com/stanley-projects/Bridge" rel="noopener">View on GitHub</a>
           </div>
         </div>
 
-        <div class="phone" role="img" aria-label="Preview of the Bridge Android app: a paste-and-convert screen showing an Apple Maps URL being converted into a Google Maps link.">
+        <div class="phone" role="img" aria-label="Preview of the Bridge Android app: an 'Auto-bridging is on' status indicator shows links open silently in the background; the manual paste-and-convert screen is shown below for the rare case a link arrives as plain text.">
           <div class="screen">
             <div class="status"></div>
             <div class="app">
               <h2>Bridge</h2>
-              <p>Convert Apple Maps links to Google Maps</p>
+              <p>Apple Maps links open silently in your maps app</p>
+              <div class="auto-status">Auto-bridging is on</div>
               <div class="input">https://maps.apple.com/?ll=37.7749,-122.4194&amp;q=San%20Francisco</div>
               <div class="convert">Convert</div>
               <div class="result">
